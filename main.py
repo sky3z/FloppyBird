@@ -1,4 +1,4 @@
-# Pygame template - skeleton for a new pygame project
+# Pygame project
 import pygame
 import random
 import time
@@ -16,11 +16,16 @@ class FloppyBird():
                             pygame.image.load("assets/dead.png")]
         self.wallUp = pygame.image.load("assets/bottom.png").convert_alpha()
         self.wallDown = pygame.image.load("assets/top.png").convert_alpha()
-        self.gap = 130
-        self.wallx = 300
-        self.birdY = 350
+        # Gap is the space between the two wall - Gap è lo spazio tra i due muri
+        self.gap = 150
+        # Wallx is the distance of the walls from the beginning - è la distanza dei muri dall'inizio del gioco
+        self.wallx = 200
+        # BirdY is the location where the bird is located at the beginning - locazione del personaggio all'inizio del gioco
+        self.birdY = 300
+        # Jump initialize - inizializzazione del salto
         self.jump = 0
-        self.jumpSpeed = 10
+        # JumpSpeed is the velocity of the jump - velocità del salto
+        self.jumpSpeed = 20
         self.gravity = 3
         self.dead = False
         self.sprite = 0
@@ -36,9 +41,9 @@ class FloppyBird():
 
     def birdUpdate(self):
         if self.jump:
-            self.jumpSpeed -= 1
+            self.jumpSpeed -= 0.5
             self.birdY -= self.jumpSpeed
-            self.jump -= 1
+            self.jump -= 0.5
         else:
             self.birdY += self.gravity
             self.gravity += 0.2
@@ -69,7 +74,7 @@ class FloppyBird():
         pygame.font.init()
         font = pygame.font.SysFont("Arial", 50)
         while True:
-            clock.tick(60)
+            clock.tick(FPS)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     sys.exit()
