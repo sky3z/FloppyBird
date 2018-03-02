@@ -33,6 +33,9 @@ class FloppyBird():
         self.sprite = 0
         self.counter = 0
         self.offset = random.randint(-110, 110)
+        self.clock = pygame.time.Clock()
+        pygame.font.init()
+        self.font = pygame.font.SysFont("Arial", 50)
         self.running = True
 
     def updateWalls(self):
@@ -89,40 +92,39 @@ class FloppyBird():
         self.screen.blit(self.text_surface, self.text_rect)
 
     def run(self):
-        clock = pygame.time.Clock()
-        pygame.font.init()
-        font = pygame.font.SysFont("Arial", 50)
         while self.running:
-            clock.tick(FPS)
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    self.running = False
-                if event.type == pygame.KEYDOWN and not self.dead:
-                    self.jump = 17
-                    self.gravity = 5
-                    self.jumpSpeed = 10
-
-            self.screen.fill((255, 255, 255))
-            self.screen.blit(self.background, (0, 0))
-            self.screen.blit(self.wallUp,
-                             (self.wallx, 360 + self.gap - self.offset))
-            self.screen.blit(self.wallDown,
-                             (self.wallx, 0 - self.gap - self.offset))
-            self.screen.blit(font.render(str(self.counter),
-                                         -1,
-                                         (255, 255, 255)),
-                             (200, 50))
-            if self.dead:
-                self.sprite = 2
-            elif self.jump:
-                self.sprite = 1
-            self.screen.blit(self.birdSprites[self.sprite], (70, self.birdY))
-            if not self.dead:
-                self.sprite = 0
+            self.clock.tick(FPS)
+            self.events()
+            self.draw()
             # self.show_start_screen()
             self.updateWalls()
             self.birdUpdate()
             pygame.display.update()
+
+    def draw(self):
+        self.screen.fill((255, 255, 255))
+        self.screen.blit(self.background, (0, 0))
+        self.screen.blit(self.wallUp,
+                         (self.wallx, 360 + self.gap - self.offset))
+        self.screen.blit(self.wallDown,
+                         (self.wallx, 0 - self.gap - self.offset))
+        self.screen.blit(self.font.render(str(self.counter), -1, (255, 255, 255)), (200, 50))
+        if self.dead:
+            self.sprite = 2
+        elif self.jump:
+            self.sprite = 1
+        self.screen.blit(self.birdSprites[self.sprite], (70, self.birdY))
+        if not self.dead:
+            self.sprite = 0
+
+    def events(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.running = False
+            if event.type == pygame.KEYDOWN and not self.dead:
+                self.jump = 17
+                self.gravity = 5
+                self.jumpSpeed = 10
 
 
 g = FloppyBird()
