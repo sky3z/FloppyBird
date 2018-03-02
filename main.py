@@ -9,6 +9,8 @@ class FloppyBird():
     # initialize pygame and create window
     def __init__(self):
         self.screen = pygame.display.set_mode((400, 608))
+        self.font_name = pygame.font.match_font(FONT_NAME)
+        pygame.display.set_caption(TITLE)
         self.bird = pygame.Rect(65, 50, 50, 50)
         self.background = pygame.image.load("assets/background.png").convert()
         self.birdSprites = [pygame.image.load("assets/1.png").convert_alpha(),
@@ -31,6 +33,7 @@ class FloppyBird():
         self.sprite = 0
         self.counter = 0
         self.offset = random.randint(-110, 110)
+        self.running = True
 
     def updateWalls(self):
         self.wallx -= 2
@@ -69,15 +72,31 @@ class FloppyBird():
             self.offset = random.randint(-110, 110)
             self.gravity = 5
 
+    """def show_start_screen(self):
+        self.screen.fill(BLACK)
+        self.draw_text("Bird", 64, RED, WIDTH / 2, HEIGHT * 1 / 6)
+        self.draw_text("(c) Mezzas", 22, RED, WIDTH / 2, HEIGHT * 1 / 3)
+        self.draw_text("Press a key to play", 18, RED, WIDTH / 2, HEIGHT * 4 / 5)
+        self.draw_text("Floppy", 64, RED, WIDTH / 2, 15)
+        pygame.display.flip()
+        self.wait_for_key()"""
+
+    def draw_text(self, text, size, color, x, y):
+        self.font = pygame.font.Font(self.font_name, size)
+        self.text_surface = self.font.render(text, True, color)
+        self.text_rect = self.text_surface.get_rect()
+        self.text_rect.midtop = (x, y)
+        self.screen.blit(self.text_surface, self.text_rect)
+
     def run(self):
         clock = pygame.time.Clock()
         pygame.font.init()
         font = pygame.font.SysFont("Arial", 50)
-        while True:
+        while self.running:
             clock.tick(FPS)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    sys.exit()
+                    self.running = False
                 if event.type == pygame.KEYDOWN and not self.dead:
                     self.jump = 17
                     self.gravity = 5
@@ -100,10 +119,14 @@ class FloppyBird():
             self.screen.blit(self.birdSprites[self.sprite], (70, self.birdY))
             if not self.dead:
                 self.sprite = 0
+            # self.show_start_screen()
             self.updateWalls()
             self.birdUpdate()
             pygame.display.update()
 
 
-if __name__ == "__main__":
-    FloppyBird().run()
+g = FloppyBird()
+while g.running:
+    g.run()
+
+pygame.quit()
