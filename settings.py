@@ -1,8 +1,8 @@
-WIDTH = 360
-HEIGHT = 480
+WIDTH = 400
+HEIGHT = 600
 FPS = 60
 TITLE = 'Floppy Bird'
-FONT_NAME = 'arial'
+FONT_NAME = 'Arial'
 
 # define colors
 WHITE = (255, 255, 255)

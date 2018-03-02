@@ -75,14 +75,14 @@ class FloppyBird():
             self.offset = random.randint(-110, 110)
             self.gravity = 5
 
-    """def show_start_screen(self):
-        self.screen.fill(BLACK)
-        self.draw_text("Bird", 64, RED, WIDTH / 2, HEIGHT * 1 / 6)
-        self.draw_text("(c) Mezzas", 22, RED, WIDTH / 2, HEIGHT * 1 / 3)
-        self.draw_text("Press a key to play", 18, RED, WIDTH / 2, HEIGHT * 4 / 5)
-        self.draw_text("Floppy", 64, RED, WIDTH / 2, 15)
+    def show_start_screen(self):
+        self.screen.blit(self.background, (0, 0))
+        self.draw_text("Bird", 64, BLACK, WIDTH / 2, HEIGHT * 1 / 7)
+        self.draw_text("(c) Mezzas", 22, BLACK, WIDTH / 2, HEIGHT * 1 / 4)
+        self.draw_text("Press a key to play", 18, BLACK, WIDTH / 2, HEIGHT * 4 / 5)
+        self.draw_text("Floppy", 64, BLACK, WIDTH / 2, 15)
         pygame.display.flip()
-        self.wait_for_key()"""
+        self.wait_for_key()
 
     def draw_text(self, text, size, color, x, y):
         self.font = pygame.font.Font(self.font_name, size)
@@ -96,10 +96,8 @@ class FloppyBird():
             self.clock.tick(FPS)
             self.events()
             self.draw()
-            # self.show_start_screen()
             self.updateWalls()
             self.birdUpdate()
-            pygame.display.update()
 
     def draw(self):
         self.screen.fill((255, 255, 255))
@@ -116,6 +114,7 @@ class FloppyBird():
         self.screen.blit(self.birdSprites[self.sprite], (70, self.birdY))
         if not self.dead:
             self.sprite = 0
+        pygame.display.update()
 
     def events(self):
         for event in pygame.event.get():
@@ -126,8 +125,20 @@ class FloppyBird():
                 self.gravity = 5
                 self.jumpSpeed = 10
 
+    def wait_for_key(self):
+        waiting = True
+        while waiting:
+            self.clock.tick(FPS)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    waiting = False
+                    self.running = False
+                if event.type == pygame.KEYUP:
+                    waiting = False
+
 
 g = FloppyBird()
+g.show_start_screen()
 while g.running:
     g.run()
 
